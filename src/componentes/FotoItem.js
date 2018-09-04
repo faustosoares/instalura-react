@@ -18,16 +18,16 @@ class FotoAtualizacoes extends Component {
 class FotoInfo extends Component {
     render(){
         return (
-            <div className="foto-info">
+            <div className="foto-in fo">
               <div className="foto-info-likes">
                 {
                   this.props.foto.likers.map(liker => {
-                    return(<a href="#">{liker.login},</a>)
+                    return (<a key={liker.login} href="#">{liker.login},</a>)
                   })
                 }
-
-                curtiram
-
+                 
+                 curtiram
+             
               </div>
 
               <p className="foto-info-legenda">
@@ -39,7 +39,7 @@ class FotoInfo extends Component {
                 {
                   this.props.foto.comentarios.map(comentario => {
                     return (
-                      <li className="comentario">
+                      <li className="comentario" key={comentario.id}>
                         <a className="foto-info-autor">{comentario.login} </a>
                         {comentario.texto}
                       </li>
@@ -60,7 +60,7 @@ class FotoHeader extends Component {
                 <img src={this.props.foto.urlPerfil} alt="foto do usuario"/>
                 <figcaption className="foto-usuario">
                   <a href="#">
-                   {this.props.foto.loginUsuario}
+                    {this.props.foto.loginUsuario}
                   </a>  
                 </figcaption>
               </figure>
@@ -69,6 +69,7 @@ class FotoHeader extends Component {
         );
     }
 }
+
 
 //A classe FotoItem recebe a foto como argumento e repassa para todos os componentes internos que são usados
 //para montar a entrada da timeline.
