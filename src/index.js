@@ -7,11 +7,16 @@ import App from './App';
 import Login from './componentes/Login';
 import Logout from './componentes/Logout';
 import {Router,Route,browserHistory} from 'react-router';
+import {matchPattern} from 'react-router/lib/PatternUtils';
+
 import registerServiceWorker from './registerServiceWorker';
 
 function verificaAutenticacao(nextState,replace) {
     //Verifica se o token de usuario ainda existe para permitir acesso a pagina da aplicacao
-    if(localStorage.getItem('auth-token') === null){
+    const resultado = matchPattern('/timeline(/:login)',nextState.location.pathname);
+    const enderecoPrivadoTimeline = resultado.paramValues[0] === undefined;
+
+    if(enderecoPrivadoTimeline && localStorage.getItem('auth-token') === null){
       replace('/?msg=você precisa estar logado para acessar o endereço');
     }
   }
@@ -21,7 +26,7 @@ function verificaAutenticacao(nextState,replace) {
     (
       <Router history={browserHistory}>
         <Route path="/" component={Login}/>
-        <Route path="/timeline" component={App} onEnter={verificaAutenticacao}/> 
+        <Route path="/timeline(/:login)" component={App} onEnter={verificaAutenticacao}/> 
         <Route path="/logout" component={Logout}/>
       </Router>
     ),

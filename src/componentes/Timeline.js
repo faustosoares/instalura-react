@@ -3,23 +3,45 @@ import FotoItem from './FotoItem';
 
 export default class Timeline extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {fotos:[]};
+        this.login = this.props.login;
     }
 
     //Utilizando Fetch Api para consumir a API.
     //Será trazido como resposta (response) o json com as características que utilizaremos no FrontEnd.
     //Atribuiremos também as fotos trazidas a variável fotos inicializada no construtor.
     //Utilizando o token gerado no login para trazer os dados específicos do usuário LOGADO (auth-token)
-    componentDidMount(){
-        //Concatenando com template string
-        fetch(`http://localhost:8080/api/fotos?X-AUTH-TOKEN=${localStorage.getItem('auth-token')}`)
-            .then(response => response.json())
-            .then(fotos => {
-                this.setState({fotos:fotos});
-            });
+    //Ou trazer também a timeline publica de qualquer usuario (com clique em seu nome ou direto por url)
+    carregaFotos(){
+        let urlPerfil;
+
+        if(this.login === undefined){
+            urlPerfil = `http://localhost:8080/api/fotos?X-AUTH-TOKEN=${localStorage.getItem('auth-token')}`;
+        } else {
+            urlPerfil = `http://localhost:8080/api/public/fotos/${this.login}`;
+        }
+
+        fetch(urlPerfil)
+        .then(response => response.json())
+        .then(fotos => {         
+          this.setState({fotos:fotos});
+        });      
+        
     }
+
+    componentDidMount(){
+        this.carregaFotos();
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.login !== undefined){
+            this.login = nextProps.login;
+            this.carregaFotos();
+        }
+    }
+
     render(){
         return (
         <div className="fotos container">

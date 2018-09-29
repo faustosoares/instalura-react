@@ -26,7 +26,8 @@ export default class Login extends Component {
             })
         };
 
-        //Realizando a requisição para verificação de login
+        //Realizando a requisição para verificação de login.
+        //A rota abaixo,pertencente a API feita em java (Spring), contém a lógica de login de aplicacao.
         fetch('http://localhost:8080/api/public/login',requestInfo)
            //Utilizando a resposta para validar o passe
             .then(response => {
